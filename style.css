@@ -20,20 +20,36 @@ body {
     font-style: italic;
     font-size: 18px;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.8); /* 稍微透明的白色，增加質感 */
+    color: rgba(255, 255, 255); /* 稍微透明的白色，增加質感 */
+    /* 使用 8 個方向的位移來包圍文字，形成 2px 的實心黑邊 */
+    text-shadow: 
+        2px  2px 0 #000,
+       -2px  2px 0 #000,
+        2px -2px 0 #000,
+       -2px -2px 0 #000,
+        0px  2px 0 #000,
+        0px -2px 0 #000,
+        2px  0px 0 #000,
+       -2px  0px 0 #000;
 }
+
+#start-screen h1{
+    font-size: 60px;
+}
+
+
+
 
 /* 遊戲容器 */
 #game-container {
     width: 393px;
-    height: 852px;
-    /* 使用背景圖片作為底圖
-    background-image: url('asset/bg_water.png');  */
+    height: 800px;
+    background-image: url('asset/bg_water.png');  
     background-size: cover;
     background-position: center;
     position: relative;
     overflow: hidden;
-    border-radius: 55px; /* 更圓潤的 iPhone 角落 */
+    /*border-radius: 55px;  更圓潤的 iPhone 角落 */
     /* 外發光效果，模擬螢幕光 */
     box-shadow: 0 0 30px rgba(0, 122, 255, 0.3), 
                 inset 0 0 20px rgba(255, 255, 255, 0.2);
@@ -100,21 +116,21 @@ p {
 }
 
 /* ============================================
-   按鈕 (玻璃質感 + 互動)
+   按鈕 
    ============================================ */
 .big-button {
     padding: 20px 80px;
     font-size: 24px;
     font-weight: 600;
     cursor: pointer;
-    background: rgba(15, 35, 255, 0.8); /* iOS 紅色半透明 */
+    background: rgba(46, 255, 4, 0.8); 
     border: 1px solid rgba(255, 255, 255, 0.4);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .big-button:hover {
     transform: scale(1.05);
-    background: rgba(0, 13, 85, 0.9);
+    background: rgba(255, 12, 12, 0.9);
     box-shadow: 0 12px 40px rgba(3, 2, 2, 0.4);
 }
 
@@ -135,9 +151,8 @@ p {
     transition: all 0.3s;
 }
 
-.end-button.green { background: rgba(52, 199, 89, 0.8); } /* iOS 綠色 */
-.end-button.red { background: rgba(255, 59, 48, 0.8); }   /* iOS 紅色 */
-.end-button.blue { background: rgba(0, 122, 255, 0.8); }  /* iOS 藍色 */
+.end-button.green { background: rgba(0, 122, 255, 0.8); } 
+.end-button.blue { background: rgba(0, 122, 255, 0.8); }  
 
 .end-button:hover { transform: translateY(-3px); }
 
@@ -212,11 +227,11 @@ p {
 
 /* 踩下時的激活狀態 */
 .target-zone.active {
-    background: rgba(255, 214, 10, 0.9); /* iOS 黃色高亮 */
-    color: #000; /* 文字變深 */
+    background: rgba(4, 29, 255, 0.9); /* iOS 黃色高亮 */
+    color: #ffffff; /* 文字變深 */
     transform: scale(1.08); /* 輕微放大 */
     border-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 0 30px rgba(255, 214, 10, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 30px rgba(57, 199, 255, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.5);
 }
 
 /* ============================================
@@ -262,19 +277,129 @@ p {
     width: 120px;
 }
 
-/* 載入與結束畫面的全螢幕模糊 */
-#loading-screen, #end-screen {
-    background: rgba(0, 0, 0, 0.4); /* 基底顏色深一點 */
-    backdrop-filter: blur(30px); /* 更強的模糊 */
-    -webkit-backdrop-filter: blur(30px);
-    border: none; /* 不需要邊框 */
+
+#end-screen h1{
+    font-size: 40px;
 }
 
 #final-score {
     font-size: 42px;
     font-weight: 800;
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+}
+
+/* 第二關物件：設定兩倍寬度 */
+.falling-object.wide {
+    width: 160px; 
+}
+
+
+/* 結束畫面圖片樣式 */
+#end-result-image {
+    width: 150px; /* 調整為適合的大小 */
+    height: auto;
+    margin: 20px 0;
+    /* 增加陰影讓它看起來浮在玻璃面板上 */
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+    /* 加入簡單的緩慢浮動動畫 */
+    animation: floatImg 3s ease-in-out infinite;
+}
+
+@keyframes floatImg {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+#loading-screen, #end-screen {
+    background: none; /* 移除背景色 */
+    backdrop-filter: none; /* 移除模糊 */
+    -webkit-backdrop-filter: none;
+    border: none;
+}
+
+/* ============================================
+   LOADING畫面
+   ============================================ */
+#loading-screen p{
+    text-shadow: 
+        2px  2px 0 #000,
+       -2px  2px 0 #000,
+        2px -2px 0 #000,
+       -2px -2px 0 #000,
+        0px  2px 0 #000,
+        0px -2px 0 #000,
+        2px  0px 0 #000,
+       -2px  0px 0 #000;
+
+}
+
+/* ============================================
+   霓虹彩虹漸層與閃爍效果
+   ============================================ */
+
+.neon-rainbow {
+    /* 1. 彩虹漸層字體 */
+    background: linear-gradient(
+        to right, 
+        #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff
+    );
+    background-size: 200% auto; /* 讓漸層可以流動 */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    
+    /* 2. 霓虹發光與閃爍動畫 */
+    animation: 
+        rainbow-flow 3s linear infinite,
+        neon-flicker 2s infinite;
+    
+    /* 增加一點間距讓發光效果不被裁切 */
+    padding: 10px;
+    display: inline-block;
+}
+
+/* 漸層流動動畫 */
+@keyframes rainbow-flow {
+    to { background-position: 200% center; }
+}
+
+/* 霓虹燈泡閃爍感動畫 */
+@keyframes neon-flicker {
+    0%, 18%, 22%, 25%, 53%, 57%, 100% {
+        /* 正常的強烈發光狀態 */
+        filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8)) 
+                drop-shadow(0 0 15px rgba(0, 122, 255, 0.6))
+                drop-shadow(0 0 30px rgba(0, 122, 255, 0.4));
+    }
+
+}
+
+#loading-screen * {
+    max-height: 100%; /* 防止任何子元素撐爆畫面 */
+}
+
+#next-btn {
+    margin-top: 10px;
+    min-width: 150px; /* 確保按鈕有固定寬度，不會變形 */
+}
+
+/* 確保外層載入畫面撐滿螢幕且不模糊 */
+#loading-screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* 內層內容區塊也要設為 Flex 才會垂直置中 */
+.loading-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 20px; /* 這裡會自動拉開標題、文字、按鈕的間距 */
+    width: 90%;
 }
 

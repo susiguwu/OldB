@@ -14,9 +14,9 @@
         <div id="background-elements"></div>
 
         <!-- 開始畫面 -->
-        <div id="start-screen" class="screen">
-            <h1>★ Old ★<br/>Balance</h1>
-            <p>move your feet, feel your energy!</p>
+        <div id="start-screen" class="screen" >
+            <h1 class="neon-rainbow">★DIGOGO★</h1>
+            <p>move your feet, feel your energy!<br/>~~跟著豬大哥跑一跑~~</p>
             <button id="start-btn" class="big-button">START</button>
         </div>
 
@@ -43,19 +43,21 @@
         <!-- 載入畫面 (關卡之間) -->
         <div id="loading-screen" class="screen" style="display: none;">
             <div class="loading-content">
-                <h2 id="loading-title">Level Complete!</h2>
-                <p id="loading-message">Great Job! Keep Going!</p>
-                <p id="loading-next">Loading Next Level...</p>
+                <h1 id="loading-title" class="neon-rainbow">Level Complete!</h1>
+                <p>加油 我們繼續下一關！<br/>注意喔⚠️下一關要用"躲"的<br/>看到生病的豬大哥，要借他過</p>
+                <!--<img id="instruction-image" src="" style="display: none; max-width: 90%; margin: 20px 0;">-->
+
+                <button id="next-btn" class="big-button" >NEXT</button>
             </div>
         </div>
 
         <!-- 結束畫面 -->
         <div id="end-screen" class="screen" style="display: none;">
-            <h1 style="color: #FFD700;">Game Complete!</h1>
-            <div id="final-score">Final Score: 0</div>
+            <h1 class="neon-rainbow">Game Complete!</h1>
+            <div id="final-score" class="neon-rainbow">Final Score: 0</div>
+            <img id="end-result-image" src="asset/obj_platform.png" alt="Success Icon">
             <div class="button-group">
                 <button id="again-btn" class="end-button green">AGAIN</button>
-                <button id="share-btn" class="end-button red">SHARE</button>
                 <button id="home-btn" class="end-button blue">HOME</button>
             </div>
         </div>
@@ -68,5 +70,7 @@
     
     <!-- 遊戲腳本 -->
     <script src="script.js"></script>
+
+    <audio id="bgm" src="asset/bgm.mp3" loop></audio>
 </body>
 </html>
