@@ -3,6 +3,24 @@
 // ============================================
 
 const bgm = document.getElementById('bgm');
+const bgm2 = document.getElementById('bgm2');
+const bgm3 = document.getElementById('bgm3');
+const allBGM = [bgm, bgm2, bgm3]; // 放到陣列方便管理
+
+function switchBGM(targetBGM) {
+    // 1. 停止所有音樂並歸零
+    allBGM.forEach(audio => {
+        if (audio) {
+            audio.pause();
+            audio.currentTime = 0;
+        }
+    });
+
+    // 2. 播放目標音樂
+    if (targetBGM) {
+        targetBGM.play().catch(e => console.log("播放受阻:", e));
+    }
+}
 
 const GAME_CONFIG = {
     level1Speed: 3000, 
@@ -107,7 +125,7 @@ function setupEventListeners() {
 
     if (bgm) {
         bgm.currentTime = 0; // 把音樂進度條拉回 0 秒
-        bgm.play();          // 重新開始撥放
+        bgm.play(bgm);          // 重新開始撥放
     }
 }
 
@@ -122,6 +140,9 @@ function startGame() {
     gameState = 'playing';
     score = 0;
     currentLevel = 1;
+
+    switchBGM(bgm); // 切換到主背景音樂
+
     document.getElementById('score-display').innerText = `Score: 0`;
     document.getElementById('start-screen').style.display = 'none';
     document.getElementById('end-screen').style.display = 'none';
@@ -152,6 +173,9 @@ function updateTimerDisplay() {
 function startLevel(level) {
     currentLevel = level;
     gameState = 'playing';
+
+    switchBGM(bgm);
+
     document.getElementById('level-display').innerText = `Level ${level}`;
     document.getElementById('game-screen').style.display = 'block';
     document.getElementById('loading-screen').style.display = 'none';
@@ -259,6 +283,10 @@ function checkCollision(pressedLane) {
 let loadingTimeout = null;
 
 function showLoading(completedLevel) {
+
+    gameState = 'loading';
+    switchBGM(bgm2); 
+
     gameState = 'loading';
     document.getElementById('game-screen').style.display = 'none';
     const loadingScreen = document.getElementById('loading-screen');
@@ -274,15 +302,30 @@ function showLoading(completedLevel) {
     // --- 新增按鈕功能 ---
     const nextBtn = document.getElementById('next-btn');
     nextBtn.onclick = () => {
-        clearTimeout(loadingTimeout); // 停止原本的 15 秒自動倒數
-        startLevel(completedLevel + 1); // 立即進入下一關
+        // 依照你的需求，點擊按鈕後音樂重頭播放
+        switchBGM(bgm2); 
+
+        // ★關鍵修正 1：停止自動倒數，避免產生兩個 startLevel 程序
+        if (loadingTimeout) {
+            clearTimeout(loadingTimeout);
+        }
+        
+        // ★關鍵修正 2：只呼叫一次 startLevel
+        startLevel(completedLevel + 1); 
     };
+
+    // ★關鍵修正 3：必須將 setTimeout 的 ID 存起來，clearTimeout 才有對象
+    loadingTimeout = setTimeout(() => {
+        startLevel(completedLevel + 1);
+    }, GAME_CONFIG.loadingDuration);
+
 
 
 }
 
 function showEnd() {
     gameState = 'ended';
+    switchBGM(bgm3);
     document.getElementById('game-screen').style.display = 'none';
     document.getElementById('end-screen').style.display = 'flex';
     document.getElementById('final-score').innerText = `Final Score: ${score}`;
