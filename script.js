@@ -47,6 +47,14 @@ let moveTimer = null;
 
 // 初始化
 async function init() {
+
+    document.addEventListener('click', () => {
+    // 如果音樂還沒播放，就讓它動起來
+    if (bgm && bgm.paused) {
+        bgm.play();
+    }
+}, { once: true });
+
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
     }
@@ -96,6 +104,11 @@ function setupEventListeners() {
         zone.addEventListener('pointerup', release);
         zone.addEventListener('pointerleave', release);
     });
+
+    if (bgm) {
+        bgm.currentTime = 0; // 把音樂進度條拉回 0 秒
+        bgm.play();          // 重新開始撥放
+    }
 }
 
 function updateTargetZonesUI() {
