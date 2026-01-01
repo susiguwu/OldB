@@ -1,55 +1,65 @@
 /* ============================================
-   基礎設定
+   基礎與背景設定 (iOS 16 風格)
    ============================================ */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    /* 使用 iOS 系統字體 */
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
 }
 
 body {
-    font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: #333;
+    background: #000; /* 深色背景更能凸顯玻璃感 */
 }
 
-/* ============================================
-   遊戲容器 (iPhone 15 尺寸)
-   ============================================ */
+/* 遊戲容器 (iPhone 15 尺寸 + 玻璃邊框) */
 #game-container {
-    width: 390px;
-    height: 844px;
-    background: linear-gradient(180deg, #87CEEB 0%, #98D8E8 100%);
+    width: 393px;
+    height: 852px;
+    /* 使用背景圖片作為底圖 */
+    background-image: url('asset/bg_water.png'); 
+    background-size: cover;
+    background-position: center;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+    border-radius: 55px; /* 更圓潤的 iPhone 角落 */
+    /* 外發光效果，模擬螢幕光 */
+    box-shadow: 0 0 30px rgba(0, 122, 255, 0.3), 
+                inset 0 0 20px rgba(255, 255, 255, 0.2);
+    border: 8px solid rgba(255, 255, 255, 0.1); /* 模擬機身邊框 */
 }
 
-/* ============================================
-   背景動畫元素
-   ============================================ */
+/* 背景動畫元素 (維持原樣，讓它們在玻璃下流動) */
 #background-elements {
     position: absolute;
     width: 100%;
     height: 100%;
     overflow: hidden;
     pointer-events: none;
-}
-
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0) translateX(0);
-    }
-    50% {
-        transform: translateY(-30px) translateX(20px);
-    }
+    z-index: 0;
 }
 
 /* ============================================
-   畫面通用樣式
+   核心玻璃擬態模組 (Glassmorphism)
+   ============================================ */
+/* 這是所有玻璃元件的基礎樣式 */
+.glass-panel, .info-box, .target-zone, .big-button, .end-button, #loading-screen, #end-screen {
+    background: rgba(255, 255, 255, 0.15); /* 半透明白色 */
+    backdrop-filter: blur(20px) saturate(180%); /* 核心模糊與飽和度效果 */
+    -webkit-backdrop-filter: blur(20px) saturate(180%); /* Safari 支援 */
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.3); /* 細緻的亮邊框 */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); /* 柔和陰影 */
+    color: #fff;
+}
+
+/* ============================================
+   畫面通用與標題
    ============================================ */
 .screen {
     position: absolute;
@@ -59,249 +69,159 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    z-index: 10;
 }
 
-/* ============================================
-   開始畫面
-   ============================================ */
-#start-screen h1 {
+h1 {
     font-size: 48px;
-    color: #fff;
-    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+    font-weight: 800; /* SF Pro 的粗體 */
+    background: linear-gradient(135deg, #fff 0%, #d0eaff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; /* 漸層文字 */
     margin-bottom: 20px;
     text-align: center;
-    line-height: 1.3;
+    letter-spacing: -1px;
+    text-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-#start-screen p {
+p {
     font-size: 18px;
-    color: #fff;
+    color: rgba(255, 255, 255, 0.9);
     margin-bottom: 40px;
     text-align: center;
     padding: 0 40px;
+    line-height: 1.5;
 }
 
+/* ============================================
+   按鈕 (玻璃質感 + 互動)
+   ============================================ */
 .big-button {
-    padding: 20px 60px;
-    font-size: 28px;
-    background: #4CAF50;
-    color: #fff;
-    border: none;
-    border-radius: 15px;
+    padding: 20px 80px;
+    font-size: 24px;
+    font-weight: 600;
     cursor: pointer;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-    font-weight: bold;
-    transition: transform 0.2s;
+    background: rgba(255, 59, 48, 0.8); /* iOS 紅色半透明 */
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .big-button:hover {
     transform: scale(1.05);
+    background: rgba(255, 59, 48, 0.9);
+    box-shadow: 0 12px 40px rgba(255, 59, 48, 0.4);
 }
 
 .big-button:active {
-    transform: scale(0.95);
+    transform: scale(0.98);
 }
 
+.button-group {
+    display: flex;
+    gap: 15px;
+}
+
+.end-button {
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.end-button.green { background: rgba(52, 199, 89, 0.8); } /* iOS 綠色 */
+.end-button.red { background: rgba(255, 59, 48, 0.8); }   /* iOS 紅色 */
+.end-button.blue { background: rgba(0, 122, 255, 0.8); }  /* iOS 藍色 */
+
+.end-button:hover { transform: translateY(-3px); }
+
 /* ============================================
-   遊戲畫面 - 分數和關卡顯示
+   遊戲中介面 (頂部資訊欄)
    ============================================ */
 #game-info {
     position: absolute;
-    top: 30px;
+    top: 60px; /* 避開 iPhone 動態島區域 */
     width: 100%;
     display: flex;
     justify-content: space-between;
-    padding: 0 30px;
-    z-index: 5;
+    padding: 0 25px;
+    z-index: 20;
 }
 
 .info-box {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 12px 24px;
-    border-radius: 10px;
-    font-size: 20px;
-    font-weight: bold;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    border-radius: 30px; /* 更圓的膠囊狀 */
 }
 
 /* ============================================
-   物件容器
+   底部踩踏區 (重點互動區域)
+   ============================================ */
+#target-zones {
+    position: absolute;
+    bottom: 60px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding: 0 25px;
+    z-index: 20;
+}
+
+.target-zone {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+    /* 預設是更透明的玻璃 */
+    background: rgba(255, 255, 255, 0.08); 
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); /* 彈性動畫 */
+}
+
+/* 踩下時的激活狀態 */
+.target-zone.active {
+    background: rgba(255, 214, 10, 0.9); /* iOS 黃色高亮 */
+    color: #000; /* 文字變深 */
+    transform: scale(1.08); /* 輕微放大 */
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 30px rgba(255, 214, 10, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+/* ============================================
+   掉落物件與其他
    ============================================ */
 #objects-container {
     position: absolute;
     width: 100%;
     height: 100%;
-    top: 0;
-    left: 0;
+    top: 0; left: 0;
     pointer-events: none;
+    z-index: 15;
 }
 
-/* 掉落物件 */
 .falling-object {
     position: absolute;
-    width: 15%;
-    height: 8%;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
-    transition: top 0.05s linear;
+    /* 這裡可以加一點陰影讓物件更有立體感 */
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
 }
 
-/* 物件類型顏色 (暫時用顏色，之後替換成圖片) */
-.falling-object.bridge {
-    background: #8B4513;
-}
-
-.falling-object.flower {
-    background: #FF69B4;
-}
-
-.falling-object.log {
-    background: #654321;
-}
-
-/* 如果你要用圖片，取消註解這段 */
-/*
-.falling-object.bridge {
-    background-image: url('asset/bridge.png');
-    background-size: cover;
-    background-position: center;
-}
-
-.falling-object.flower {
-    background-image: url('asset/flower.png');
-    background-size: cover;
-    background-position: center;
-}
-
-.falling-object.log {
-    background-image: url('asset/log.png');
-    background-size: cover;
-    background-position: center;
-}
-*/
-
-/* ============================================
-   底部踩踏區
-   ============================================ */
-#target-zones {
-    position: absolute;
-    bottom: 50px;
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    padding: 0 20px;
-    z-index: 5;
-}
-
-.target-zone {
-    width: 90px;
-    height: 90px;
-    background: #FFFACD;
-    border: 3px solid #FFD700;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: bold;
-    color: #333;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: all 0.2s;
-}
-
-.target-zone.active {
-    background: #FFD700;
-    transform: scale(1.1);
-}
-
-/* ============================================
-   載入畫面
-   ============================================ */
-#loading-screen {
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 10;
-}
-
-.loading-content {
-    text-align: center;
-    padding: 0 40px;
-}
-
-#loading-title {
-    font-size: 42px;
-    color: #fff;
-    margin-bottom: 20px;
-    font-weight: bold;
-}
-
-#loading-message {
-    font-size: 28px;
-    color: #FFD700;
-    margin-bottom: 30px;
-}
-
-#loading-next {
-    font-size: 32px;
-    color: #fff;
-}
-
-/* ============================================
-   結束畫面
-   ============================================ */
-#end-screen {
-    background: rgba(0, 0, 0, 0.9);
-    z-index: 10;
-}
-
-#end-screen h1 {
-    font-size: 52px;
-    margin-bottom: 20px;
-    font-weight: bold;
+/* 載入與結束畫面的全螢幕模糊 */
+#loading-screen, #end-screen {
+    background: rgba(0, 0, 0, 0.4); /* 基底顏色深一點 */
+    backdrop-filter: blur(30px); /* 更強的模糊 */
+    -webkit-backdrop-filter: blur(30px);
+    border: none; /* 不需要邊框 */
 }
 
 #final-score {
-    font-size: 38px;
-    color: #fff;
-    margin-bottom: 40px;
-}
-
-.button-group {
-    display: flex;
-    gap: 20px;
-}
-
-.end-button {
-    padding: 18px 45px;
-    font-size: 24px;
-    color: #fff;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-    font-weight: bold;
-    transition: transform 0.2s;
-}
-
-.end-button:hover {
-    transform: scale(1.05);
-}
-
-.end-button:active {
-    transform: scale(0.95);
-}
-
-.end-button.green {
-    background: #4CAF50;
-}
-
-.end-button.red {
-    background: #FF5722;
-}
-
-.end-button.blue {
-    background: #2196F3;
+    font-size: 42px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
