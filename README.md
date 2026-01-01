@@ -1,4 +1,4 @@
-## How to Enjoy OldBalance 
+## How to Enjoy ★DIGOGO★
 
 ### 1. 硬體/軟體準備
 * **手機端**：打開 [遊戲網頁](https://susiguwu.github.io/OldB/)
