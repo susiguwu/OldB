@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Floor Mat Rehabilitation Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 遊戲容器 -->
+    <div id="game-container">
+        
+        <!-- 背景動畫元素 -->
+        <div id="background-elements"></div>
+
+        <!-- 開始畫面 -->
+        <div id="start-screen" class="screen">
+            <h1>Floor Mat<br/>Rehab Game</h1>
+            <p>Step on the mat to catch objects!</p>
+            <button id="start-btn" class="big-button">START</button>
+        </div>
+
+        <!-- 遊戲畫面 -->
+        <div id="game-screen" class="screen" style="display: none;">
+            <!-- 分數和關卡顯示 -->
+            <div id="game-info">
+                <div class="info-box" id="score-display">Score: 0</div>
+                <div class="info-box" id="level-display">Level 1</div>
+            </div>
+
+            <!-- 物件掉落區域 -->
+            <div id="objects-container"></div>
+
+            <!-- 底部踩踏區 -->
+            <div id="target-zones">
+                <div class="target-zone" data-position="left">LEFT</div>
+                <div class="target-zone" data-position="middle">MIDDLE</div>
+                <div class="target-zone" data-position="right">RIGHT</div>
+            </div>
+        </div>
+
+        <!-- 載入畫面 (關卡之間) -->
+        <div id="loading-screen" class="screen" style="display: none;">
+            <div class="loading-content">
+                <h2 id="loading-title">Level Complete!</h2>
+                <p id="loading-message">Great Job! Keep Going!</p>
+                <p id="loading-next">Loading Next Level...</p>
+            </div>
+        </div>
+
+        <!-- 結束畫面 -->
+        <div id="end-screen" class="screen" style="display: none;">
+            <h1 style="color: #FFD700;">Game Complete!</h1>
+            <div id="final-score">Final Score: 0</div>
+            <div class="button-group">
+                <button id="again-btn" class="end-button green">AGAIN</button>
+                <button id="share-btn" class="end-button red">SHARE</button>
+                <button id="home-btn" class="end-button blue">HOME</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
+    <!-- 遊戲腳本 -->
+    <script src="script.js"></script>
+</body>
+</html>
