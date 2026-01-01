@@ -33,6 +33,8 @@ let objects = [];
 let matInput = { left: false, middle: false, right: false };
 let objectIdCounter = 0;
 let database = null;
+let timeLeft = 20;
+let timerInterval = null;
 
 // 初始化
 async function init() {
@@ -69,6 +71,8 @@ async function init() {
     document.getElementById('home-btn').onclick = () => location.reload();
 }
 
+
+
 function updateTargetZonesUI() {
     ['left', 'middle', 'right'].forEach(pos => {
         const zone = document.querySelector(`.target-zone[data-position="${pos}"]`);
@@ -86,18 +90,55 @@ function startGame() {
     startLevel(1);
 }
 
+function startCountdown() {
+    // 清除舊的計時器（如果有）
+    clearInterval(timerInterval);
+
+    // 從設定值抓取總時間 (20000 毫秒 = 20 秒)
+    timeLeft = GAME_CONFIG.levelDuration / 1000;
+    updateTimerDisplay();
+
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+
+        // 最後 5 秒加入警告效果
+        const timerEl = document.getElementById('timer-display');
+        if (timeLeft <= 5) {
+            timerEl.classList.add('warning');
+        } else {
+            timerEl.classList.remove('warning');
+        }
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    document.getElementById('timer-display').innerText = `${timeLeft}s`;
+}
+
 function startLevel(level) {
     currentLevel = level;
     document.getElementById('level-display').innerText = `Level ${level}`;
+
+    // 重設計時器顯示樣式
+    document.getElementById('timer-display').classList.remove('warning');
+    startCountdown(); // 啟動倒數
     
     let speed = level === 1 ? GAME_CONFIG.level1Speed : (level === 2 ? GAME_CONFIG.level2Speed : GAME_CONFIG.level3Speed);
     
     let spawnTimer = setInterval(() => spawnObject(level), GAME_CONFIG.spawnInterval);
     let moveTimer = setInterval(() => moveObjects(speed), 30);
+
+    
     
     setTimeout(() => {
         clearInterval(spawnTimer);
         clearInterval(moveTimer);
+        clearInterval(timerInterval);
         if (level < 3) showLoading(level); else showEnd();
     }, GAME_CONFIG.levelDuration);
 }
@@ -133,6 +174,8 @@ function moveObjects(speed) {
     });
 }
 
+
+
 function checkCollision(lane) {
     objects = objects.filter(obj => {
         if (obj.lane === lane && obj.y >= 75 && obj.y <= 92) {
@@ -160,5 +203,7 @@ function showEnd() {
     document.getElementById('end-screen').style.display = 'flex';
     document.getElementById('final-score').innerText = `Final Score: ${score}`;
 }
+
+
 
 init();

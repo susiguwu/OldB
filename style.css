@@ -1,11 +1,10 @@
 /* ============================================
-   基礎與背景設定 (iOS 16 風格)
+   基礎與背景設定
    ============================================ */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    /* 使用 iOS 系統字體 */
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
 }
 
@@ -14,15 +13,22 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: #000; /* 深色背景更能凸顯玻璃感 */
+    background: #333335; /* 深色背景更能凸顯玻璃感 */
 }
 
-/* 遊戲容器 (iPhone 15 尺寸 + 玻璃邊框) */
+#start-screen p{
+    font-style: italic;
+    font-size: 18px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.8); /* 稍微透明的白色，增加質感 */
+}
+
+/* 遊戲容器 */
 #game-container {
     width: 393px;
     height: 852px;
-    /* 使用背景圖片作為底圖 */
-    background-image: url('asset/bg_water.png'); 
+    /* 使用背景圖片作為底圖
+    background-image: url('asset/bg_water.png');  */
     background-size: cover;
     background-position: center;
     position: relative;
@@ -101,15 +107,15 @@ p {
     font-size: 24px;
     font-weight: 600;
     cursor: pointer;
-    background: rgba(255, 59, 48, 0.8); /* iOS 紅色半透明 */
+    background: rgba(15, 35, 255, 0.8); /* iOS 紅色半透明 */
     border: 1px solid rgba(255, 255, 255, 0.4);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .big-button:hover {
     transform: scale(1.05);
-    background: rgba(255, 59, 48, 0.9);
-    box-shadow: 0 12px 40px rgba(255, 59, 48, 0.4);
+    background: rgba(0, 13, 85, 0.9);
+    box-shadow: 0 12px 40px rgba(3, 2, 2, 0.4);
 }
 
 .big-button:active {
@@ -154,6 +160,27 @@ p {
     font-weight: 700;
     letter-spacing: 0.5px;
     border-radius: 30px; /* 更圓的膠囊狀 */
+}
+
+/* 計時器專屬樣式 */
+#timer-display {
+    min-width: 80px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+/* 當時間低於 5 秒時的警告狀態 */
+#timer-display.warning {
+    background: rgba(255, 59, 48, 0.6); /* iOS 警告紅 */
+    color: #fff;
+    transform: scale(1.1);
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.6; }
+    100% { opacity: 1; }
 }
 
 /* ============================================
@@ -204,10 +231,35 @@ p {
     z-index: 15;
 }
 
+/* 調整物件大小的地方 */
+.falling-object {
+    position: absolute;
+    width: 80px;  /* 直接給定寬度 */
+    height: auto; /* 高度自動依比例縮放 */
+    object-fit: contain; /* 確保圖片不變形 */
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+    transition: top 0.03s linear; /* 讓移動看起來更平滑 */
+}
+
 .falling-object {
     position: absolute;
     /* 這裡可以加一點陰影讓物件更有立體感 */
     filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+}
+
+/* 獨木橋可以窄長一點 */
+.falling-object.bridge {
+    width: 60px;
+}
+
+/* 花朵可以圓潤一點 */
+.falling-object.flower {
+    width: 80px;
+}
+
+/* 橫木可以寬一點 */
+.falling-object.log {
+    width: 120px;
 }
 
 /* 載入與結束畫面的全螢幕模糊 */
@@ -225,3 +277,4 @@ p {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
